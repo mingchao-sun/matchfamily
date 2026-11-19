@@ -1,0 +1,80 @@
+---
+refs:
+    rosenbaum1983:
+        type: 'article'
+        author: Rosenbaum, P. R., & Rubin, D. B.
+        year: 1983
+        title: 'The central role of the propensity score in observational studies for causal effects'
+        publisher: 'Biometrika, 70(1), 41-55'
+
+    wooldridge2007:
+        type: 'article'
+        author: Wooldridge, J. M.
+        year: 2007
+        title: 'Inverse probability weighted estimation for general missing data problems'
+        publisher: 'Journal of Econometrics, 141(2), 1281-1301'
+
+    robins1994:
+        type: 'article'
+        author: Robins, J. M., Rotnitzky, A., & Zhao, L. P.
+        year: 1994
+        title: 'Estimation of regression coefficients when some regressors are not always observed'
+        publisher: 'Journal of the American Statistical Association, 89(427), 846-866'
+
+    crump2009:
+        type: 'article'
+        author: Crump, R. K., Hotz, V. J., Imbens, G. W., & Mitnik, O. A.
+        year: 2009
+        title: 'Dealing with limited overlap in estimation of average treatment effects'
+        publisher: 'Biometrika, 96(1), 187-199'
+
+    imbensrubin2015:
+        type: 'book'
+        author: Imbens, G. W., & Rubin, D. B.
+        year: 2015
+        title: 'Causal Inference for Statistics, Social, and Biomedical Sciences'
+        publisher: Cambridge University Press
+
+    hainmueller2012:
+        type: 'article'
+        author: Hainmueller, J.
+        year: 2012
+        title: 'Entropy balancing for causal effects: a multivariate reweighting method to produce balanced samples in observational studies'
+        publisher: 'Political Analysis, 20(1), 25-46'
+
+    abadieimbens2006:
+        type: 'article'
+        author: Abadie, A., & Imbens, G. W.
+        year: 2006
+        title: 'Large sample properties of matching estimators for average treatment effects'
+        publisher: 'Econometrica, 74(1), 235-267'
+
+    abadieimbens2011:
+        type: 'article'
+        author: Abadie, A., & Imbens, G. W.
+        year: 2011
+        title: 'Bias-corrected matching estimators for average treatment effects'
+        publisher: 'Journal of Business & Economic Statistics, 29(1), 1-11'
+
+    vanderweeleding2017:
+        type: 'article'
+        author: VanderWeele, T. J., & Ding, P.
+        year: 2017
+        title: 'Sensitivity analysis in observational research: introducing the E-value'
+        publisher: 'Annals of Internal Medicine, 167(4), 268-274'
+
+    rosenbaum2002:
+        type: 'book'
+        author: Rosenbaum, P. R.
+        year: 2002
+        title: 'Observational Studies (2nd ed.)'
+        publisher: Springer
+
+    austin2009:
+        type: 'article'
+        author: Austin, P. C.
+        year: 2009
+        title: 'Balance diagnostics for comparing the distribution of baseline covariates between treatment groups in propensity-score matched samples'
+        publisher: 'Statistics in Medicine, 28(25), 3083-3107'
+
+...

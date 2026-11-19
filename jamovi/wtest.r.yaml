@@ -1,0 +1,152 @@
+---
+name: wtest
+title: Weighting and Doubly Robust Estimators
+jrs: '1.1'
+
+items:
+    - name: guide
+      title: Data and setup guide
+      type: Html
+      visible: (showGuide)
+
+    - name: helpText
+      title: Method notes
+      type: Html
+      visible: (showHelp)
+
+    - name: notes
+      title: Notes
+      type: Html
+      visible: true
+
+    - name: effects
+      title: 'Treatment effect estimates'
+      type: Table
+      visible: true
+      clearWith:
+          - outcome
+          - treat
+          - covs
+          - extra
+          - weights
+          - cluster
+          - estimand
+          - doRa
+          - doIpw
+          - doAipw
+          - doIpwra
+          - link
+          - trim
+          - trimLo
+          - trimHi
+          - level
+      columns:
+          - name: estimand
+            title: 'Estimand'
+            type: text
+          - name: method
+            title: 'Estimator'
+            type: text
+          - name: estimate
+            title: 'Effect'
+            type: number
+          - name: se
+            title: 'Std. error'
+            type: number
+          - name: z
+            title: 'z'
+            type: number
+          - name: p
+            title: 'p'
+            type: number
+            format: zto,pvalue
+          - name: lo
+            title: 'CI lower'
+            type: number
+          - name: hi
+            title: 'CI upper'
+            type: number
+
+    - name: pom
+      title: 'Potential-outcome means'
+      type: Table
+      visible: (showPom)
+      clearWith:
+          - outcome
+          - treat
+          - covs
+          - extra
+          - weights
+          - cluster
+          - estimand
+          - doRa
+          - doIpw
+          - doAipw
+          - doIpwra
+          - link
+          - trim
+          - trimLo
+          - trimHi
+      columns:
+          - name: estimand
+            title: 'Estimand'
+            type: text
+          - name: method
+            title: 'Estimator'
+            type: text
+          - name: group
+            title: 'Mean of'
+            type: text
+          - name: estimate
+            title: 'Estimate'
+            type: number
+          - name: se
+            title: 'Std. error'
+            type: number
+
+    - name: wdiag
+      title: 'Inverse-probability weights'
+      type: Table
+      visible: (showWeights)
+      clearWith:
+          - treat
+          - covs
+          - weights
+          - estimand
+          - link
+          - trim
+          - trimLo
+          - trimHi
+      columns:
+          - name: estimand
+            title: 'Estimand'
+            type: text
+          - name: group
+            title: 'Group'
+            type: text
+          - name: n
+            title: 'N'
+            type: integer
+          - name: min
+            title: 'Min'
+            type: number
+          - name: mean
+            title: 'Mean'
+            type: number
+          - name: max
+            title: 'Max'
+            type: number
+          - name: ess
+            title: 'Effective N'
+            type: number
+          - name: share
+            title: 'Largest weight, share of the total'
+            type: number
+
+refs:
+    - rosenbaum1983
+    - wooldridge2007
+    - robins1994
+    - imbensrubin2015
+
+...

@@ -1,0 +1,20 @@
+Package: matchfamily
+Type: Package
+Title: Matching and Weighting Family for jamovi
+Version: 1.0.0
+Author: Mingchao Sun
+Maintainer: Mingchao Sun <mingchao.sun@hotmail.com>
+URL: https://github.com/mingchao-sun/matchfamily
+BugReports: https://github.com/mingchao-sun/matchfamily/issues
+Description: Treatment-effect estimation under selection on observables for jamovi:
+    propensity score and overlap, covariate balance, regression adjustment, inverse
+    probability weighting, augmented IPW, IPW regression adjustment, entropy balancing and
+    nearest-neighbour matching, with standard errors that account for the estimated
+    propensity score or the matching, a side-by-side comparison, and sensitivity analysis
+    (E-value, Rosenbaum bounds).
+License: GPL-3
+Encoding: UTF-8
+Imports:
+    jmvcore (>= 2.3.4),
+    R6,
+    ggplot2

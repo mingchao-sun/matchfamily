@@ -1,0 +1,103 @@
+---
+title: Matching and Weighting Family
+name: matchfamily
+version: 1.0.0
+jms: '1.0'
+authors:
+  - Mingchao Sun
+maintainer: Mingchao Sun <mingchao.sun@hotmail.com>
+date: '2026-11-20'
+type: R
+description: >-
+  Treatment effects under selection on observables: propensity score and
+  overlap, covariate balance, regression adjustment, inverse probability
+  weighting, augmented IPW, IPW regression adjustment, entropy balancing and
+  nearest-neighbour matching, with standard errors that account for the
+  estimated propensity score or the matching; a side-by-side comparison of the
+  estimators; and sensitivity analysis (E-value, Rosenbaum bounds).
+datasets:
+  - name: LaLonde job training (Dehejia and Wahba sample)
+    path: lalonde.omv
+    description: >-
+      614 men: treated (NSW job training) and PSID comparison group (lalonde,
+      MatchIt package). Outcome re78 (earnings in 1978), treatment treat,
+      covariates age, educ, race (Nominal), married, nodegree, re74, re75. The
+      experimental benchmark is about 1,800 dollars.
+  - name: Simulated confounded treatment
+    path: sim_confounded.csv
+    description: >-
+      Simulated, 3,000 rows, good overlap: outcome y, treatment treat,
+      covariates x1, x2, x3. The effect is 1 + 0.5 x1, so ATE is 0.99, ATT 1.16
+      and ATC 0.83 in the sample.
+  - name: Simulated poor overlap
+    path: sim_overlap.csv
+    description: >-
+      Simulated, 3,000 rows: strong selection on x1 leaves some treated units
+      without comparable controls. Outcome y, treatment treat, covariates x1,
+      x2; the true effect is 1.5.
+  - name: Simulated hidden confounder
+    path: sim_hidden.csv
+    description: >-
+      Simulated, 2,000 rows with a confounder not in the data: outcome y,
+      treatment treat, covariates x1, x2; the true effect is 1.
+analyses:
+  - name: psmodel
+    title: Propensity Score and Overlap
+    menuGroup: Matching
+    menuSubgroup: Preparation
+    menuTitle: Propensity Score and Overlap
+    menuSubtitle: Model, overlap and trimming
+    ns: matchfamily
+    category: analyses
+  - name: balance
+    title: Covariate Balance
+    menuGroup: Matching
+    menuSubgroup: Preparation
+    menuTitle: Covariate Balance
+    menuSubtitle: Standardised differences, before and after weighting
+    ns: matchfamily
+    category: analyses
+  - name: wtest
+    title: Weighting and Doubly Robust Estimators
+    menuGroup: Matching
+    menuSubgroup: Estimation
+    menuTitle: Weighting and Doubly Robust Estimators
+    menuSubtitle: RA, IPW, AIPW, IPWRA
+    ns: matchfamily
+    category: analyses
+  - name: nnmatch
+    title: Matching Estimators
+    menuGroup: Matching
+    menuSubgroup: Estimation
+    menuTitle: Matching Estimators
+    menuSubtitle: Nearest-neighbour matching
+    ns: matchfamily
+    category: analyses
+  - name: ebal
+    title: Entropy Balancing
+    menuGroup: Matching
+    menuSubgroup: Estimation
+    menuTitle: Entropy Balancing
+    menuSubtitle: Weights that match the covariate moments exactly
+    ns: matchfamily
+    category: analyses
+  - name: matchcmp
+    title: Compare Matching and Weighting Estimators
+    menuGroup: Matching
+    menuSubgroup: Estimation
+    menuTitle: Compare Estimators
+    menuSubtitle: Side by side, same data and estimand
+    ns: matchfamily
+    category: analyses
+  - name: sensobs
+    title: Sensitivity to Unobserved Confounding
+    menuGroup: Matching
+    menuSubgroup: Sensitivity
+    menuTitle: Sensitivity to Unobserved Confounding
+    menuSubtitle: E-value and Rosenbaum bounds
+    ns: matchfamily
+    category: analyses
+usesNative: true
+minApp: 1.0.8
+
+...

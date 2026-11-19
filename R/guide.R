@@ -1,0 +1,171 @@
+# "Data and setup guide" and "Method notes" for each analysis.
+
+mf_settings <- function(rows) {
+    paste0("<table style='border-collapse:collapse;margin:4px 0 8px 0'>",
+           "<tr><th style='text-align:left;padding:2px 14px 2px 0;border-bottom:1px solid #999'>Field</th>",
+           "<th style='text-align:left;padding:2px 0;border-bottom:1px solid #999'>Set to</th></tr>",
+           paste0("<tr><td style='padding:2px 14px 2px 0'>", names(rows), "</td><td style='padding:2px 0'>",
+                  unlist(rows), "</td></tr>", collapse = ""), "</table>")
+}
+
+mf_guide_raw <- function(key) {
+    switch(key,
+    psmodel = paste0(
+        "<h3>Propensity Score and Overlap: data and setup</h3>",
+        "<p>Estimates the probability of treatment given the covariates and shows whether treated and control units overlap.</p>",
+        "<h4>Sample data</h4>",
+        mf_settings(list("Dataset" = "<b>LaLonde job training (Dehejia and Wahba sample)</b>", "Treatment" = "treat", "Covariates" = "age, educ, race (Nominal), married, nodegree, re74, re75 (all others Continuous or Nominal as in the file; do not set educ to Nominal)")),
+        "<p>Expected: c statistic 0.874; the median propensity score is 0.65 for the 185 treated and 0.08 for the 429 controls, so the PSID controls differ greatly from the trainees and many sit near zero.</p>",
+        "<h4>Data layout</h4><p>One row per unit. The treatment is 0/1, or a variable with two values (the second value is the treated group). ",
+        "Covariates may be numeric or nominal. Rows with a missing value in any used variable are dropped and counted.</p>"),
+    wtest = paste0(
+        "<h3>Weighting and Doubly Robust Estimators: data and setup</h3>",
+        "<p>Estimates the effect of a binary treatment when all confounders are observed, with regression adjustment, weighting and doubly robust estimators.</p>",
+        "<h4>Sample data</h4>",
+        mf_settings(list("Dataset" = "<b>Simulated confounded treatment</b>", "Outcome" = "y", "Treatment" = "treat", "Covariates" = "x1, x2, x3", "Estimand" = "All three (default)")),
+        "<p>Expected (sample values ATE 0.994, ATT 1.163, ATC 0.835; naive difference 1.70). The estimates are close to the sample values but not equal to them:</p>",
+        "<table style='border-collapse:collapse;margin:4px 0 8px 0'><tr><th style='text-align:left;padding:2px 14px 2px 0;border-bottom:1px solid #999'>Estimand</th>",
+        "<th style='padding:2px 10px;border-bottom:1px solid #999'>RA</th><th style='padding:2px 10px;border-bottom:1px solid #999'>IPW</th>",
+        "<th style='padding:2px 10px;border-bottom:1px solid #999'>AIPW</th><th style='padding:2px 10px;border-bottom:1px solid #999'>IPWRA</th></tr>",
+        "<tr><td>ATE</td><td align='center'>1.012</td><td align='center'>1.037</td><td align='center'>1.010</td><td align='center'>1.010</td></tr>",
+        "<tr><td>ATT</td><td align='center'>1.173</td><td align='center'>1.191</td><td align='center'>1.172</td><td align='center'>1.171</td></tr>",
+        "<tr><td>ATC</td><td align='center'>0.859</td><td align='center'>0.886</td><td align='center'>0.857</td><td align='center'>0.858</td></tr></table>",
+        "<p>Standard errors are about 0.04 to 0.06.</p>",
+        "<p><b>Overlap weights.</b> Set <i>Estimand</i> to <i>Overlap-weighted effect (ATO)</i>: RA 1.018 (s.e. 0.040), IPW 1.018 (0.040), AIPW 1.016 (0.040); IPWRA is skipped with a note. ",
+        "<b>CBPS.</b> Set <i>Propensity score model</i> to <i>Covariate balancing (CBPS, exact)</i> with all three estimands: IPW 1.014 (0.042) for the ATE, 1.171 (0.046) for the ATT and 0.858 (0.047) for the ATC, close to the doubly robust values, while IPW with the logit score gave 1.037, 1.191 and 0.886.</p>",
+        "<p>Covariates are used in the propensity score; covariates in <i>Extra outcome-model covariates</i> enter the outcome regressions in addition to them ",
+        "(a variable can sit in one box only).</p>"),
+    balance = paste0(
+        "<h3>Covariate Balance: data and setup</h3>",
+        "<p>Compares the covariates of treated and control units, with and without weights, to judge whether the comparison is fair.</p>",
+        "<h4>Sample data</h4>",
+        mf_settings(list("Dataset" = "<b>LaLonde job training (Dehejia and Wahba sample)</b>", "Treatment" = "treat", "Covariates" = "age, educ, race (Nominal), married, nodegree, re74, re75 (all others Continuous or Nominal as in the file; do not set educ to Nominal)",
+                         "Adjustment" = "Inverse probability weights", "Estimand" = "ATT")),
+        "<p>Expected: before weighting the largest absolute standardised difference is 1.877 (white) and 8 of the 9 variables exceed 0.1; ",
+        "after weighting the largest is 0.119 (age) and 1 variable exceeds 0.1. The effective sample size of the controls falls from 429 to about 100.</p>",
+        "<h4>Data layout</h4><p>One row per unit; the treatment is 0/1 or has two values (the second is the treated group). Nominal covariates give one row per level. ",
+        "To check weights made elsewhere (for example matching weights), choose <i>Weights from a variable</i> and select the variable.</p>"),
+    ebal = paste0(
+        "<h3>Entropy Balancing: data and setup</h3>",
+        "<p>Finds weights that make the covariate means (optionally variances and skewness) of the comparison group equal those of the target group, then compares weighted outcomes.</p>",
+        "<h4>Sample data</h4>",
+        mf_settings(list("Dataset" = "<b>Simulated confounded treatment</b>", "Outcome" = "y", "Treatment" = "treat", "Covariates" = "x1, x2, x3", "Estimand" = "ATT", "Moments" = "Means")),
+        "<p>Expected (sample ATT 1.163): effect 1.171, standard error 0.046; the covariate means match exactly after balancing. ",
+        "On the <b>LaLonde</b> data (outcome re78, ATT, means) the effect is 1,273 with standard error 790.</p>"),
+    nnmatch = paste0(
+        "<h3>Matching Estimators: data and setup</h3>",
+        "<p>Estimates the effect of a binary treatment by comparing each unit with the most similar units of the other group.</p>",
+        "<h4>Sample data</h4>",
+        mf_settings(list("Dataset" = "<b>Simulated confounded treatment</b>", "Outcome" = "y", "Treatment" = "treat", "Matching covariates" = "x1, x2, x3", "Estimand" = "ATT")),
+        "<p>Expected (sample ATT 1.163): with one neighbour and Mahalanobis distance the estimate is close to it; with the bias adjustment it is closer and the standard error smaller. ",
+        "Unadjusted nearest-neighbour matching is biased when there are several continuous covariates.</p>",
+        "<h4>Data layout</h4><p>One row per unit. Matching covariates may be numeric or nominal. <i>Exact-match variables</i> must agree exactly between a unit and its matches; ",
+        "units with no match are left out and counted. Bias-adjustment covariates default to the matching covariates.</p>"),
+    matchcmp = paste0(
+        "<h3>Compare Matching and Weighting Estimators: data and setup</h3>",
+        "<p>Runs the estimators of this module on the same data, covariates and estimand, so you can see whether the conclusion depends on the method.</p>",
+        "<h4>Sample data</h4>",
+        mf_settings(list("Dataset" = "<b>Simulated confounded treatment</b>", "Outcome" = "y", "Treatment" = "treat", "Covariates" = "x1, x2, x3", "Estimand" = "ATT")),
+        "<p>Expected (sample ATT 1.163): unadjusted 1.704; RA 1.173; IPW 1.191; AIPW 1.172; IPWRA 1.171; matching (one neighbour, bias adjustment) 1.196; entropy balancing 1.171. ",
+        "The unadjusted difference is far off, the adjusted ones agree. On the <b>LaLonde</b> data (ATT) they range from about 30 (matching) to 1,650 (RA), which is the instability the example is known for.</p>"),
+    sensobs = paste0(
+        "<h3>Sensitivity to Unobserved Confounding: data and setup</h3>",
+        "<p>Asks how strong a confounder you did not measure would have to be to overturn the result.</p>",
+        "<h4>Sample data</h4>",
+        mf_settings(list("Dataset" = "<b>Simulated hidden confounder</b> (true effect 1.0)", "Outcome" = "y", "Treatment" = "treat", "Covariates" = "x1, x2", "Estimand" = "ATT")),
+        "<p>Expected: the doubly robust ATT is 1.477 (the hidden confounder biases it upward); standardised difference 0.90; E-value 3.96, and 3.64 for the confidence limit. ",
+        "Rosenbaum bounds with one match per treated unit (908 pairs): the signed-rank upper bound passes 0.05 at Gamma = 6.97, the sign test at 3.59. ",
+        "Note that the bounds measure how much hidden bias the <i>significance</i> can take, not how large the bias already is.</p>",
+        "<h4>Manual input</h4><p>To assess an estimate from elsewhere, choose <i>Enter an estimate</i>, the effect measure, the estimate and its confidence limits.</p>"),
+    "")
+}
+
+mf_notes_html <- function(key) {
+    switch(key,
+    psmodel = paste0(
+        "<h3>Propensity Score and Overlap: method notes</h3>",
+        "<h4>What it does</h4><p>The propensity score is the probability of being treated given the covariates, estimated by logit or probit. Under selection on observables, ",
+        "comparing units with the same score removes the bias from the covariates (Rosenbaum and Rubin 1983).</p>",
+        "<h4>Results</h4><ul><li><b>Model</b>: coefficients with heteroskedasticity-robust standard errors. The c statistic is the area under the ROC curve: 0.5 means the covariates do not predict treatment.</li>",
+        "<li><b>Overlap</b>: the score distribution by group. Where one group has no counterpart the effect cannot be estimated without extrapolating. ",
+        "The common support is the range covered by both groups.</li>",
+        "<li><b>Trimming</b>: drops observations outside the common range, outside 0.1 to 0.9 (Crump et al. 2009) or outside bounds you set. The count is reported; trimmed estimates describe the retained population.</li></ul>",
+        "<h4>Limits</h4><p>The score cannot be estimated when a covariate predicts treatment almost perfectly; the analysis then says so. A well-fitting score is not the goal: balance is (see Covariate Balance).</p>"),
+    wtest = paste0(
+        "<h3>Weighting and Doubly Robust Estimators: method notes</h3>",
+        "<h4>What it does</h4><p>Four estimators of the average treatment effect (ATE), the effect on the treated (ATT) or on the controls (ATC) when all confounders are observed:</p>",
+        "<ul><li><b>RA</b>: separate linear outcome regressions in each group, predicted for everyone.</li>",
+        "<li><b>IPW</b>: weighted means with weights from the propensity score (normalised, as in Stata's teffects ipw).</li>",
+        "<li><b>AIPW</b>: regression adjustment plus a weighted correction of its residuals; consistent if either the outcome model or the score is correct.</li>",
+        "<li><b>IPWRA</b>: outcome regressions weighted by the inverse probabilities; also doubly robust.</li></ul>",
+        "<h4>Standard errors</h4><p>All estimators are solved as moment conditions and the covariance is the M-estimation sandwich, so the uncertainty of the estimated propensity score ",
+        "and of the regressions is included. With a cluster variable the moments are summed within clusters. The intervals are normal-based.</p>",
+        "<h4>Options</h4><ul><li><b>Estimand</b>: all three (the default, one block of rows per estimand) or one of ATE, ATT, ATC. The ATC is obtained by exchanging the groups.</li>",
+        "<li><b>Overlap-weighted effect (ATO)</b>: the effect for the population in which treated and control units overlap most (Li, Morgan and Zaslavsky, 2018). Treated units get the weight 1 - e(x) and control units e(x), so units with scores near 0 or 1 count little; the weights are bounded, no trimming is needed, and with the logit model the weighted covariate means of the two groups are exactly equal. Available for RA, IPW and AIPW; the effect is not the ATE, so it can differ from it when effects vary.</li>",
+        "<li><b>Covariate balancing score (CBPS)</b>: the propensity score model whose coefficients make the weighted covariate means of the groups equal exactly (Imai and Ratkovic, 2014, the exactly identified version), instead of maximising the likelihood. It is chosen separately for each estimand. It can cure the poor balance that a misspecified logit gives and the standard errors include its estimation.</li>",
+        "<li><b>Trimming</b>: as in Propensity Score and Overlap; the propensity score is first fitted on all units, units are dropped, and everything is re-estimated on the rest.</li>",
+        "<li><b>Weight diagnostics</b>: the extreme weights and the effective sample size; a few large weights make IPW unstable.</li></ul>",
+        "<h4>Limits</h4><p>Valid only if every confounder is in the data and treated and control units overlap. The outcome models are linear in the covariates; add squares and interactions as variables to relax that.</p>"),
+    balance = paste0(
+        "<h3>Covariate Balance: method notes</h3>",
+        "<h4>What it does</h4><p>Under selection on observables a comparison is credible only if treated and comparison units look alike on the covariates. ",
+        "This analysis measures the remaining differences, before and after the adjustment you choose.</p>",
+        "<h4>Statistics</h4><ul><li><b>Standardised difference</b>: difference in means divided by a standard deviation taken from the unadjusted sample ",
+        "(pooled for the ATE, treated for the ATT, control for the ATC, unless you choose otherwise). Values above about 0.1 are usually considered imbalance. ",
+        "It does not depend on the sample size, unlike a t test.</li>",
+        "<li><b>Variance ratio</b>: treated over control variance; it should be near 1 (roughly 0.5 to 2).</li>",
+        "<li><b>KS</b>: the largest gap between the two distribution functions; it looks beyond the mean.</li></ul>",
+        "<h4>Adjustments</h4><p>Inverse probability weights come from the propensity score of the chosen link; entropy balancing weights match the means (or more moments) exactly; ",
+        "a weights variable lets you check weights made elsewhere. Weighted statistics use the weights as reliability weights.</p>",
+        "<h4>Limits</h4><p>Balance on the observed covariates says nothing about unobserved ones. Binary variables are standardised like the others with a sample standard deviation ",
+        "(the cobalt package uses sqrt(p(1-p)) for them, which differs by a factor of about sqrt((n-1)/n)). Variables are not tested for significance on purpose.</p>"),
+    ebal = paste0(
+        "<h3>Entropy Balancing: method notes</h3>",
+        "<h4>What it does</h4><p>Entropy balancing (Hainmueller 2012) reweights the comparison group (both groups for the ATE) so that chosen moments of the covariates equal those of the target. ",
+        "Among all weights that do so it takes the ones closest to uniform (Kullback-Leibler distance). Balance is exact by construction, so no balance-and-check loop is needed.</p>",
+        "<h4>Options</h4><ul><li><b>Moments</b>: means only, or also variances (squares) or skewness (cubes) of the non-binary covariates.</li>",
+        "<li><b>Estimand</b>: ATT reweights the controls to the treated; ATC the treated to the controls; ATE both to the whole sample.</li></ul>",
+        "<h4>Standard errors</h4><p>The weights, the target means and the weighted outcome means are solved as moment conditions, and the covariance is the M-estimation sandwich; ",
+        "the uncertainty of the weights is included. With a cluster variable the moments are summed within clusters.</p>",
+        "<h4>Limits</h4><p>If the target moments lie outside what positive weights can reach, no solution exists and the analysis stops with a message: use fewer covariates or moments. ",
+        "Exact balance on many moments can give a few very large weights; check the effective sample size. It requires that all confounders are observed.</p>"),
+    nnmatch = paste0(
+        "<h3>Matching Estimators: method notes</h3>",
+        "<h4>What it does</h4><p>For every unit whose counterfactual is needed (all units for the ATE, the treated for the ATT, the controls for the ATC) the outcome of the nearest ",
+        "units in the other group is used in its place. Matching is with replacement, so a unit can serve many times, and all ties for the k-th neighbour are included ",
+        "(Abadie and Imbens 2006, 2011).</p>",
+        "<h4>Options</h4><ul><li><b>Distance</b>: Mahalanobis (the covariates are rescaled by their covariance matrix), inverse variance (diagonal), or Euclidean on the raw covariates.</li>",
+        "<li><b>Bias adjustment</b>: matching on continuous covariates is biased because matches are not exact; the adjustment corrects each match with a linear outcome regression fitted in the other group.</li>",
+        "<li><b>Exact matching and caliper</b>: restrict matches to the same value of some variables or to a maximum distance. Units left without a match are excluded and counted, and the estimand then refers to the remaining units (Stata's teffects stops instead).</li></ul>",
+        "<h4>Standard errors</h4><p>The Abadie-Imbens heteroskedasticity-consistent estimator, which accounts for the fact that matching reuses units. Each unit's conditional variance is estimated from the unit and its nearest neighbours in the same group (default 2 neighbours). ",
+        "The bootstrap is not valid for matching with a fixed number of neighbours.</p>",
+        "<h4>Limits</h4><p>Requires all confounders to be observed and overlap. With more than a few continuous covariates the matches are far away: use the bias adjustment. ",
+        "The caliper is in the units of the chosen distance.</p>"),
+    matchcmp = paste0(
+        "<h3>Compare Matching and Weighting Estimators: method notes</h3>",
+        "<h4>What it does</h4><p>Estimates the same ATE, ATT or ATC with the unadjusted difference, regression adjustment, IPW, AIPW, IPWRA, nearest-neighbour matching and entropy balancing, ",
+        "using the same covariates. All of them assume that the covariates contain every confounder, so agreement is reassuring about the method, not about that assumption.</p>",
+        "<h4>Reading the table</h4><ul><li>Large differences between methods point to poor overlap or a misspecified model; check the overlap and balance analyses.</li>",
+        "<li>The balance columns give the largest absolute standardised difference after the weighting or matching of each method; entropy balancing is exact for the means by construction.</li>",
+        "<li>A method that fails (for example entropy balancing when the target moments cannot be reached) is reported in the notes and the others still run.</li></ul>",
+        "<h4>Limits</h4><p>Standard errors come from each method (M-estimation for the weighting estimators, Abadie-Imbens for matching) and are not comparable in size when the methods use different parts of the sample. ",
+        "Sampling weights and clusters are not available here; use the individual analyses.</p>"),
+    sensobs = paste0(
+        "<h3>Sensitivity to Unobserved Confounding: method notes</h3>",
+        "<h4>E-value</h4><p>VanderWeele and Ding (2017): the minimum strength of association, on the risk-ratio scale, that an unmeasured confounder would need with both treatment and outcome to explain the estimate away. ",
+        "It is reported for the estimate and for the confidence limit closest to the null (1 if the interval includes the null). A standardised mean difference d is converted by RR = exp(0.91 d); ",
+        "odds and hazard ratios of common outcomes are converted by their usual approximations. An E-value is not a probability and has no threshold; judge it against the confounders you can think of.</p>",
+        "<h4>Rosenbaum bounds</h4><p>For matched pairs, hidden bias is measured by Gamma, the factor by which two matched units may differ in their odds of treatment. ",
+        "For each Gamma the table gives the lower and upper bound of the one-sided p-value of the sign test (exact) and of the Wilcoxon signed-rank test (normal approximation). ",
+        "The result is considered sensitive at the Gamma where the upper bound crosses 0.05. The pairs come from one-to-one (or k) nearest-neighbour matching of the treated (ATT) without replacement restrictions; ",
+        "controls used more than once make the pairs dependent, which the bounds ignore.</p>",
+        "<h4>Limits</h4><p>Both tools assume the measured covariates are properly handled; they say how fragile the result is, not whether it is wrong.</p>"),
+    "")
+}
+
+# Adds where to open the example data after the introduction.
+mf_guide_html <- function(key) {
+    x <- mf_guide_raw(key)
+    sub("</p>", paste0("</p><p><i>Open the sample data from File &gt; Open &gt; Data Library &gt; Matching and Weighting Family; ",
+                       "the library lists each data set by the bold name below.</i></p>"), x, fixed = TRUE)
+}

@@ -1,0 +1,128 @@
+---
+name: psmodel
+title: Propensity Score and Overlap
+jrs: '1.1'
+
+items:
+    - name: guide
+      title: Data and setup guide
+      type: Html
+      visible: (showGuide)
+
+    - name: helpText
+      title: Method notes
+      type: Html
+      visible: (showHelp)
+
+    - name: notes
+      title: Notes
+      type: Html
+      visible: true
+
+    - name: coef
+      title: 'Propensity score model'
+      type: Table
+      visible: true
+      clearWith:
+          - treat
+          - covs
+          - weights
+          - link
+          - level
+      columns:
+          - name: term
+            title: 'Variable'
+            type: text
+          - name: estimate
+            title: 'Coefficient'
+            type: number
+          - name: se
+            title: 'Std. error'
+            type: number
+          - name: z
+            title: 'z'
+            type: number
+          - name: p
+            title: 'p'
+            type: number
+            format: zto,pvalue
+          - name: lo
+            title: 'CI lower'
+            type: number
+          - name: hi
+            title: 'CI upper'
+            type: number
+
+    - name: overlap
+      title: 'Propensity score by group'
+      type: Table
+      visible: true
+      clearWith:
+          - treat
+          - covs
+          - weights
+          - link
+      columns:
+          - name: group
+            title: 'Group'
+            type: text
+          - name: n
+            title: 'N'
+            type: integer
+          - name: min
+            title: 'Min'
+            type: number
+          - name: q05
+            title: '5th percentile'
+            type: number
+          - name: median
+            title: 'Median'
+            type: number
+          - name: q95
+            title: '95th percentile'
+            type: number
+          - name: max
+            title: 'Max'
+            type: number
+
+    - name: summary
+      title: 'Model summary and common support'
+      type: Table
+      visible: true
+      clearWith:
+          - treat
+          - covs
+          - weights
+          - link
+          - trim
+          - trimLo
+          - trimHi
+      columns:
+          - name: item
+            title: ''
+            type: text
+          - name: value
+            title: ''
+            type: text
+
+    - name: psPlot
+      title: 'Propensity score distribution by treatment group'
+      type: Image
+      width: 640
+      height: 400
+      renderFun: .plotPs
+      visible: (plot)
+      clearWith:
+          - treat
+          - covs
+          - weights
+          - link
+          - trim
+          - trimLo
+          - trimHi
+
+refs:
+    - rosenbaum1983
+    - crump2009
+
+...

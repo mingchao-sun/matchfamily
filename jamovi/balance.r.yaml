@@ -1,0 +1,143 @@
+---
+name: balance
+title: Covariate Balance
+jrs: '1.1'
+
+items:
+    - name: guide
+      title: Data and setup guide
+      type: Html
+      visible: (showGuide)
+
+    - name: helpText
+      title: Method notes
+      type: Html
+      visible: (showHelp)
+
+    - name: notes
+      title: Notes
+      type: Html
+      visible: true
+
+    - name: summary
+      title: 'Balance summary'
+      type: Table
+      visible: true
+      clearWith:
+          - treat
+          - covs
+          - weights
+          - adjW
+          - adjust
+          - estimand
+          - link
+          - moments
+          - denom
+          - stdBinary
+          - threshold
+      columns:
+          - name: item
+            title: ''
+            type: text
+          - name: before
+            title: 'Unadjusted'
+            type: text
+          - name: after
+            title: 'Adjusted'
+            type: text
+            visible: (adjust:ipw || adjust:ebal || adjust:var)
+
+    - name: bal
+      title: 'Covariate balance'
+      type: Table
+      visible: true
+      clearWith:
+          - treat
+          - covs
+          - weights
+          - adjW
+          - adjust
+          - estimand
+          - link
+          - moments
+          - denom
+          - stdBinary
+      columns:
+          - name: variable
+            title: 'Variable'
+            type: text
+          - name: m1
+            title: 'Treated mean'
+            type: number
+            superTitle: Unadjusted
+            visible: (showMeans)
+          - name: m0
+            title: 'Control mean'
+            type: number
+            superTitle: Unadjusted
+            visible: (showMeans)
+          - name: smd
+            title: 'Std. diff.'
+            type: number
+            superTitle: Unadjusted
+          - name: vr
+            title: 'Var. ratio'
+            type: number
+            superTitle: Unadjusted
+            visible: (showVr)
+          - name: ks
+            title: 'KS'
+            type: number
+            superTitle: Unadjusted
+            visible: (showKs)
+          - name: am1
+            title: 'Treated mean'
+            type: number
+            superTitle: Adjusted
+            visible: (showMeans && (adjust:ipw || adjust:ebal || adjust:var))
+          - name: am0
+            title: 'Control mean'
+            type: number
+            superTitle: Adjusted
+            visible: (showMeans && (adjust:ipw || adjust:ebal || adjust:var))
+          - name: asmd
+            title: 'Std. diff.'
+            type: number
+            superTitle: Adjusted
+            visible: (adjust:ipw || adjust:ebal || adjust:var)
+          - name: avr
+            title: 'Var. ratio'
+            type: number
+            superTitle: Adjusted
+            visible: (showVr && (adjust:ipw || adjust:ebal || adjust:var))
+          - name: aks
+            title: 'KS'
+            type: number
+            superTitle: Adjusted
+            visible: (showKs && (adjust:ipw || adjust:ebal || adjust:var))
+
+    - name: lovePlot
+      title: 'Absolute standardised differences'
+      type: Image
+      width: 640
+      height: 420
+      renderFun: .plotLove
+      visible: (plot)
+      clearWith:
+          - treat
+          - covs
+          - weights
+          - adjW
+          - adjust
+          - estimand
+          - link
+          - moments
+          - denom
+          - stdBinary
+          - threshold
+
+refs:
+    - austin2009
+    - hainmueller2012
+
+...

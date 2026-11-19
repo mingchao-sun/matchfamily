@@ -1,0 +1,172 @@
+---
+name: ebal
+title: Entropy Balancing
+jrs: '1.1'
+
+items:
+    - name: guide
+      title: Data and setup guide
+      type: Html
+      visible: (showGuide)
+
+    - name: helpText
+      title: Method notes
+      type: Html
+      visible: (showHelp)
+
+    - name: notes
+      title: Notes
+      type: Html
+      visible: true
+
+    - name: effects
+      title: 'Treatment effect after entropy balancing'
+      type: Table
+      visible: true
+      clearWith:
+          - outcome
+          - treat
+          - covs
+          - weights
+          - cluster
+          - estimand
+          - moments
+          - level
+      columns:
+          - name: method
+            title: 'Estimand'
+            type: text
+          - name: estimate
+            title: 'Effect'
+            type: number
+          - name: se
+            title: 'Std. error'
+            type: number
+          - name: z
+            title: 'z'
+            type: number
+          - name: p
+            title: 'p'
+            type: number
+            format: zto,pvalue
+          - name: lo
+            title: 'CI lower'
+            type: number
+          - name: hi
+            title: 'CI upper'
+            type: number
+
+    - name: pom
+      title: 'Potential-outcome means'
+      type: Table
+      visible: (showPom)
+      clearWith:
+          - outcome
+          - treat
+          - covs
+          - weights
+          - cluster
+          - estimand
+          - moments
+      columns:
+          - name: estimand
+            title: 'Estimand'
+            type: text
+          - name: group
+            title: 'Mean of'
+            type: text
+          - name: estimate
+            title: 'Estimate'
+            type: number
+          - name: se
+            title: 'Std. error'
+            type: number
+
+    - name: wdiag
+      title: 'Entropy balancing weights'
+      type: Table
+      visible: (showWeights)
+      clearWith:
+          - treat
+          - covs
+          - weights
+          - cluster
+          - estimand
+          - moments
+      columns:
+          - name: estimand
+            title: 'Estimand'
+            type: text
+          - name: group
+            title: 'Group'
+            type: text
+          - name: n
+            title: 'N'
+            type: integer
+          - name: min
+            title: 'Min'
+            type: number
+          - name: mean
+            title: 'Mean'
+            type: number
+          - name: max
+            title: 'Max'
+            type: number
+          - name: ess
+            title: 'Effective N'
+            type: number
+          - name: share
+            title: 'Largest weight, share of the total'
+            type: number
+
+    - name: bal
+      title: 'Covariate balance'
+      type: Table
+      visible: (showBalance)
+      clearWith:
+          - treat
+          - covs
+          - weights
+          - cluster
+          - estimand
+          - moments
+      columns:
+          - name: estimand
+            title: 'Estimand'
+            type: text
+          - name: variable
+            title: 'Variable'
+            type: text
+          - name: m1
+            title: 'Treated mean'
+            type: number
+            superTitle: Unadjusted
+          - name: m0
+            title: 'Control mean'
+            type: number
+            superTitle: Unadjusted
+          - name: smd
+            title: 'Std. diff.'
+            type: number
+            superTitle: Unadjusted
+          - name: am1
+            title: 'Treated mean'
+            type: number
+            superTitle: After balancing
+          - name: am0
+            title: 'Control mean'
+            type: number
+            superTitle: After balancing
+          - name: asmd
+            title: 'Std. diff.'
+            type: number
+            superTitle: After balancing
+          - name: avr
+            title: 'Var. ratio'
+            type: number
+            superTitle: After balancing
+
+refs:
+    - hainmueller2012
+
+...

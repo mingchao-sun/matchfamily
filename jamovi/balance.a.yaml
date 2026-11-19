@@ -1,0 +1,152 @@
+---
+name: balance
+title: Covariate Balance
+jas: '1.2'
+version: '1.0.0'
+menuGroup: Matching
+menuSubgroup: Preparation
+menuTitle: Covariate Balance
+menuSubtitle: Standardised differences, before and after weighting
+
+options:
+    - name: data
+      type: Data
+
+    - name: treat
+      title: Treatment (0/1)
+      type: Variable
+      permitted:
+          - numeric
+          - factor
+
+    - name: covs
+      title: Covariates
+      type: Variables
+      suggested:
+          - continuous
+          - nominal
+      permitted:
+          - numeric
+          - factor
+
+    - name: weights
+      title: Sampling weights
+      type: Variable
+      permitted:
+          - numeric
+
+    - name: adjW
+      title: Weights variable
+      type: Variable
+      permitted:
+          - numeric
+
+    - name: adjust
+      title: Adjustment
+      type: List
+      options:
+          - name: none
+            title: 'None (unadjusted only)'
+          - name: ipw
+            title: 'Inverse probability weights'
+          - name: ebal
+            title: 'Entropy balancing'
+          - name: var
+            title: 'Weights from a variable'
+      default: ipw
+
+    - name: estimand
+      title: Estimand
+      type: List
+      options:
+          - name: ate
+            title: 'Average treatment effect (ATE)'
+          - name: att
+            title: 'Effect on the treated (ATT)'
+          - name: atc
+            title: 'Effect on the controls (ATC)'
+          - name: ato
+            title: 'Overlap-weighted effect (ATO)'
+      default: ate
+
+    - name: link
+      title: Propensity score model
+      type: List
+      options:
+          - name: logit
+            title: 'Logit'
+          - name: probit
+            title: 'Probit'
+          - name: cbps
+            title: 'Covariate balancing (CBPS, exact)'
+      default: logit
+
+    - name: moments
+      title: Moments to balance (entropy balancing)
+      type: List
+      options:
+          - name: m1
+            title: 'Means'
+          - name: m2
+            title: 'Means and variances'
+          - name: m3
+            title: 'Means, variances and skewness'
+      default: m1
+
+    - name: denom
+      title: Standardise by
+      type: List
+      options:
+          - name: auto
+            title: 'Follows the estimand'
+          - name: pooled
+            title: 'Pooled standard deviation'
+          - name: treated
+            title: 'Treated group'
+          - name: control
+            title: 'Control group'
+      default: auto
+
+    - name: stdBinary
+      title: Standardise binary variables
+      type: Bool
+      default: true
+
+    - name: threshold
+      title: Balance threshold (absolute standardised difference)
+      type: Number
+      default: 0.1
+      min: 0.001
+      max: 5
+
+    - name: showMeans
+      title: Group means
+      type: Bool
+      default: true
+
+    - name: showVr
+      title: Variance ratio
+      type: Bool
+      default: true
+
+    - name: showKs
+      title: Kolmogorov-Smirnov statistic
+      type: Bool
+      default: true
+
+    - name: plot
+      title: Love plot
+      type: Bool
+      default: true
+
+    - name: showHelp
+      title: Method notes
+      type: Bool
+      default: false
+
+    - name: showGuide
+      title: Data and setup guide
+      type: Bool
+      default: false
+
+...

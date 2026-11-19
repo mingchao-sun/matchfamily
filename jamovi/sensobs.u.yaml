@@ -1,0 +1,98 @@
+title: Sensitivity to Unobserved Confounding
+name: sensobs
+jus: '3.0'
+stage: 0
+compilerMode: tame
+children:
+    - type: VariableSupplier
+      persistentItems: false
+      stretchFactor: 1
+      children:
+          - type: TargetLayoutBox
+            label: Outcome
+            children:
+                - type: VariablesListBox
+                  name: outcome
+                  isTarget: true
+                  height: small
+                  maxItemCount: 1
+          - type: TargetLayoutBox
+            label: Treatment (0/1)
+            children:
+                - type: VariablesListBox
+                  name: treat
+                  isTarget: true
+                  height: small
+                  maxItemCount: 1
+          - type: TargetLayoutBox
+            label: Covariates
+            children:
+                - type: VariablesListBox
+                  name: covs
+                  isTarget: true
+                  height: small
+    - type: CollapseBox
+      label: Effect to assess
+      collapsed: false
+      children:
+          - type: ComboBox
+            name: mode
+          - type: ComboBox
+            name: estimand
+          - type: ComboBox
+            name: link
+          - type: TextBox
+            name: level
+            label: Confidence level (%)
+            format: number
+    - type: CollapseBox
+      label: Manual input
+      collapsed: true
+      children:
+          - type: ComboBox
+            name: mType
+          - type: TextBox
+            name: mEst
+            label: Estimate
+            format: number
+            enable: (mode:manual)
+          - type: TextBox
+            name: mLo
+            label: Lower confidence limit
+            format: number
+            enable: (mode:manual)
+          - type: TextBox
+            name: mHi
+            label: Upper confidence limit
+            format: number
+            enable: (mode:manual)
+    - type: CollapseBox
+      label: Rosenbaum bounds
+      collapsed: true
+      children:
+          - type: CheckBox
+            name: doRosenbaum
+          - type: TextBox
+            name: k
+            label: Matches per treated unit
+            format: number
+          - type: TextBox
+            name: gammaMax
+            label: Largest Gamma
+            format: number
+          - type: TextBox
+            name: gammaStep
+            label: Step
+            format: number
+          - type: CheckBox
+            name: plot
+    - type: CollapseBox
+      label: Output
+      collapsed: true
+      children:
+          - type: CheckBox
+            name: showHelp
+            label: Method notes
+          - type: CheckBox
+            name: showGuide
+            label: Data and setup guide

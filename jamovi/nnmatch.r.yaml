@@ -1,0 +1,188 @@
+---
+name: nnmatch
+title: Matching Estimators
+jrs: '1.1'
+
+items:
+    - name: guide
+      title: Data and setup guide
+      type: Html
+      visible: (showGuide)
+
+    - name: helpText
+      title: Method notes
+      type: Html
+      visible: (showHelp)
+
+    - name: notes
+      title: Notes
+      type: Html
+      visible: true
+
+    - name: effects
+      title: 'Treatment effect by nearest-neighbour matching'
+      type: Table
+      visible: true
+      clearWith:
+          - outcome
+          - treat
+          - covs
+          - adjvars
+          - exact
+          - estimand
+          - k
+          - metric
+          - biasadj
+          - caliper
+          - varNn
+          - level
+      columns:
+          - name: method
+            title: 'Estimand'
+            type: text
+          - name: estimate
+            title: 'Effect'
+            type: number
+          - name: se
+            title: 'Std. error'
+            type: number
+          - name: z
+            title: 'z'
+            type: number
+          - name: p
+            title: 'p'
+            type: number
+            format: zto,pvalue
+          - name: lo
+            title: 'CI lower'
+            type: number
+          - name: hi
+            title: 'CI upper'
+            type: number
+
+    - name: summary
+      title: 'Matching summary'
+      type: Table
+      visible: true
+      clearWith:
+          - outcome
+          - treat
+          - covs
+          - adjvars
+          - exact
+          - estimand
+          - k
+          - metric
+          - biasadj
+          - caliper
+          - varNn
+      columns:
+          - name: estimand
+            title: 'Estimand'
+            type: text
+          - name: item
+            title: ''
+            type: text
+          - name: value
+            title: ''
+            type: text
+
+    - name: uses
+      title: 'Times a unit is used as a match'
+      type: Table
+      visible: (showMatches)
+      clearWith:
+          - outcome
+          - treat
+          - covs
+          - adjvars
+          - exact
+          - estimand
+          - k
+          - metric
+          - biasadj
+          - caliper
+          - varNn
+      columns:
+          - name: estimand
+            title: 'Estimand'
+            type: text
+          - name: group
+            title: 'Group'
+            type: text
+          - name: n0
+            title: '0'
+            type: integer
+          - name: n1
+            title: '1'
+            type: integer
+          - name: n2
+            title: '2'
+            type: integer
+          - name: n3
+            title: '3 to 4'
+            type: integer
+          - name: n5
+            title: '5 or more'
+            type: integer
+          - name: max
+            title: 'Maximum'
+            type: number
+
+    - name: bal
+      title: 'Covariate balance'
+      type: Table
+      visible: (showBalance)
+      clearWith:
+          - outcome
+          - treat
+          - covs
+          - adjvars
+          - exact
+          - estimand
+          - k
+          - metric
+          - biasadj
+          - caliper
+          - varNn
+      columns:
+          - name: estimand
+            title: 'Estimand'
+            type: text
+          - name: variable
+            title: 'Variable'
+            type: text
+          - name: m1
+            title: 'Treated mean'
+            type: number
+            superTitle: Unadjusted
+          - name: m0
+            title: 'Control mean'
+            type: number
+            superTitle: Unadjusted
+          - name: smd
+            title: 'Std. diff.'
+            type: number
+            superTitle: Unadjusted
+          - name: am1
+            title: 'Treated mean'
+            type: number
+            superTitle: Matched
+          - name: am0
+            title: 'Control mean'
+            type: number
+            superTitle: Matched
+          - name: asmd
+            title: 'Std. diff.'
+            type: number
+            superTitle: Matched
+          - name: avr
+            title: 'Var. ratio'
+            type: number
+            superTitle: Matched
+
+refs:
+    - abadieimbens2006
+    - abadieimbens2011
+
+...

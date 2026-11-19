@@ -1,0 +1,166 @@
+---
+name: sensobs
+title: Sensitivity to Unobserved Confounding
+jrs: '1.1'
+
+items:
+    - name: guide
+      title: Data and setup guide
+      type: Html
+      visible: (showGuide)
+
+    - name: helpText
+      title: Method notes
+      type: Html
+      visible: (showHelp)
+
+    - name: notes
+      title: Notes
+      type: Html
+      visible: true
+
+    - name: effect
+      title: 'Estimate assessed'
+      type: Table
+      visible: (mode:data)
+      clearWith:
+          - mode
+          - outcome
+          - treat
+          - covs
+          - estimand
+          - link
+          - mType
+          - mEst
+          - mLo
+          - mHi
+          - k
+          - level
+      columns:
+          - name: method
+            title: 'Estimand'
+            type: text
+          - name: estimate
+            title: 'Effect'
+            type: number
+          - name: se
+            title: 'Std. error'
+            type: number
+          - name: lo
+            title: 'CI lower'
+            type: number
+          - name: hi
+            title: 'CI upper'
+            type: number
+          - name: d
+            title: 'Std. mean difference'
+            type: number
+          - name: dlo
+            title: 'SMD lower'
+            type: number
+          - name: dhi
+            title: 'SMD upper'
+            type: number
+
+    - name: evalue
+      title: 'E-value'
+      type: Table
+      visible: true
+      clearWith:
+          - mode
+          - outcome
+          - treat
+          - covs
+          - estimand
+          - link
+          - mType
+          - mEst
+          - mLo
+          - mHi
+          - k
+          - level
+      columns:
+          - name: item
+            title: ''
+            type: text
+          - name: value
+            title: 'Value'
+            type: number
+          - name: rr
+            title: 'Risk-ratio equivalent'
+            type: number
+          - name: e
+            title: 'E-value'
+            type: number
+
+    - name: rsum
+      title: 'Rosenbaum bounds: matched pairs'
+      type: Table
+      visible: (mode:data && doRosenbaum)
+      clearWith:
+          - mode
+          - outcome
+          - treat
+          - covs
+          - k
+          - doRosenbaum
+      columns:
+          - name: item
+            title: ''
+            type: text
+          - name: value
+            title: ''
+            type: text
+
+    - name: rosen
+      title: 'Rosenbaum bounds: one-sided p-values'
+      type: Table
+      visible: (mode:data && doRosenbaum)
+      clearWith:
+          - mode
+          - outcome
+          - treat
+          - covs
+          - k
+          - doRosenbaum
+          - gammaMax
+          - gammaStep
+      columns:
+          - name: gamma
+            title: 'Gamma'
+            type: number
+          - name: wlo
+            title: 'Signed rank, lower bound'
+            type: number
+          - name: whi
+            title: 'Signed rank, upper bound'
+            type: number
+          - name: slo
+            title: 'Sign test, lower bound'
+            type: number
+          - name: shi
+            title: 'Sign test, upper bound'
+            type: number
+
+    - name: rosPlot
+      title: 'Upper bound of the p-value as hidden bias grows'
+      type: Image
+      width: 560
+      height: 360
+      renderFun: .plotRos
+      visible: (mode:data && doRosenbaum && plot)
+      clearWith:
+          - mode
+          - outcome
+          - treat
+          - covs
+          - k
+          - doRosenbaum
+          - gammaMax
+          - gammaStep
+
+refs:
+    - vanderweeleding2017
+    - rosenbaum2002
+
+...
