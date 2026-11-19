@@ -2,7 +2,7 @@
 
 A jamovi module for the effect of a binary treatment when all confounders are observed: propensity scores and overlap, covariate balance, regression
 adjustment, weighting, doubly robust estimators, matching, entropy balancing and sensitivity to unobserved confounding. The estimation engine is
-written in base R (no dependency on `MatchIt`, `WeightIt`, `Matching` or `cobalt`) and is checked against Stata and R packages. Chinese summary: [README.zh.md](README.zh.md).
+written in base R (no dependency on `MatchIt`, `WeightIt`, `Matching` or `cobalt`) and is checked against Stata and R packages. Chinese summary: [README.zh.md](README.zh.md). Japanese summary: [README.ja.md](README.ja.md).
 
 ## Analyses (jamovi menu: Matching)
 
